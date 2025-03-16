@@ -361,4 +361,104 @@ const CryptoKingpin = () => {
       {!account ? (
         <button 
           className="bg-blue-500 text-white px-4 py-2 rounded"
-          onClick={connectWallet}
+          onClick={connectWallet}>
+          Connect Wallet
+        </button>
+      ) : (
+        <div>
+          <div className="mb-4">
+            <div className="flex justify-between items-center">
+              <div>
+                <span className="font-bold">Address:</span> {account.substring(0, 6)}...{account.substring(38)}
+              </div>
+              <div>
+                <span className="font-bold">Action Points:</span> {playerState.actionPoints}
+                <button 
+                  className="ml-2 bg-blue-500 text-white px-2 py-1 rounded text-sm"
+                  onClick={restoreActionPoints}
+                >
+                  Restore
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          {gameMessage && (
+            <div className="my-4 p-3 bg-yellow-100 border border-yellow-300 rounded">
+              {gameMessage}
+            </div>
+          )}
+          
+          {!isRegistered ? (
+            <div className="p-4 border rounded mb-4">
+              <h2 className="text-xl mb-2">Welcome to Crypto Kingpin</h2>
+              <p className="mb-4">You need to register with a player NFT to start playing.</p>
+              <button 
+                className="bg-purple-500 text-white px-4 py-2 rounded"
+                onClick={registerPlayer}
+              >
+                Register Player
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <h2 className="text-xl mb-4">City Map</h2>
+                <div className="border p-2 rounded bg-gray-50">
+                  {renderMap()}
+                </div>
+                <div className="mt-2 text-sm">
+                  Click on a district to move there (costs 1 action point)
+                </div>
+              </div>
+              
+              <div>
+                <h2 className="text-xl mb-4">Player Status</h2>
+                <div className="border p-4 rounded">
+                  <div><span className="font-bold">Current Location:</span> {districts[playerState.currentDistrict]?.name}</div>
+                  <div><span className="font-bold">Risk Level:</span> {districts[playerState.currentDistrict]?.riskLevel}/10</div>
+                  <div><span className="font-bold">Police Presence:</span> {districts[playerState.currentDistrict]?.policePresence}/10</div>
+                  
+                  <div className="mt-4">
+                    <h3 className="font-bold">Inventory</h3>
+                    <div className="grid grid-cols-2 gap-2 mt-2">
+                      {assets.map(asset => 
+                        playerState.inventory[asset.id] > 0 && (
+                          <div key={asset.id} className="border p-2 rounded text-sm">
+                            <div className="font-bold">{asset.name}</div>
+                            <div>{playerState.inventory[asset.id]} units</div>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          {renderMarket()}
+          
+          <div className="mt-8 text-sm text-gray-500">
+            <h3 className="font-bold mb-2">Game Help</h3>
+            <ul className="list-disc pl-5">
+              <li>Move between districts to find the best prices</li>
+              <li>Buy low, sell high to make profits</li>
+              <li>Watch out for police in districts with high police presence if you're carrying contraband</li>
+              <li>Action points replenish every hour</li>
+              <li>You need KingTokens (KING) to trade in the game</li>
+            </ul>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default CryptoKingpin;
+
+
+
+
+
+          
