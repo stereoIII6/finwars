@@ -298,8 +298,6 @@ contract CryptoKingpin is Ownable {
             }
         } else {
             // Lucky find
-            uint8 randomAsset = uint8(random(asset));} else {
-            // Lucky find
             uint8 randomAsset = uint8(random(assetCount));
             uint256 randomAmount = random(5) + 1;
             players[player].inventory[randomAsset] += randomAmount;
