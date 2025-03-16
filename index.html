@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crypto Kingpin</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f0f2f5;
+      color: #333;
+    }
+    
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    h1 {
+      color: #4a5568;
+      margin: 0;
+    }
+    
+    .wallet-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #f7fafc;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    
+    .token-badge {
+      background: #ebf4ff;
+      color: #3182ce;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    
+    .game-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+    
+    .panel {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+    }
+    
+    h2 {
+      margin-top: 0;
+      color: #2d3748;
+      font-size: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .map-container {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    
+    .map-row {
+      display: flex;
+      gap: 2px;
+    }
+    
+    .map-cell {
+      width: 40px;
+      height: 40px;
+      background: #edf2f7;
+      border: 1px solid #cbd5e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      position: relative;
+      cursor: pointer;
+    }
+    
+    .district {
+      background: #bee3f8;
+    }
+    
+    .district:hover {
+      background: #90cdf4;
+    }
+    
+    .player-position {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      width: 10px;
+      height: 10px;
+      background: #e53e3e;
+      border-radius: 50%;
+    }
+    
+    .asset-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+      margin-top: 15px;
+    }
+    
+    .asset-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 10px;
+      background: #f7fafc;
+    }
+    
+    .asset-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+    
+    .asset-name {
+      font-weight: bold;
+    }
+    
+    .contraband {
+      color: #e53e3e;
+      font-size: 12px;
+    }
+    
+    .legal {
+      color: #38a169;
+      font-size: 12px;
+    }
+    
+    .asset-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+    }
+    
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+      padding: 6px 12px;
+      font-weight: 500;
+      transition: background-color 0.2s;
+    }
+    
+    .btn-primary {
+      background-color: #4299e1;
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: #3182ce;
+    }
+    
+    .btn-success {
+      background-color: #48bb78;
+      color: white;
+    }
+    
+    .btn-success:hover {
+      background-color: #38a169;
+    }
+    
+    .btn-danger {
+      background-color: #f56565;
+      color: white;
+    }
+    
+    .btn-danger:hover {
+      background-color: #e53e3e;
+    }
+    
+    .status-message {
+      background: #fefcbf;
+      border: 1px solid #f6e05e;
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+    
+    .inventory-item {
+      display: inline-block;
+      background: #edf2f7;
+      border: 1px solid #cbd5e0;
+      border-radius: 4px;
+      padding: 4px 8px;
+      margin-right: 5px;
+      margin-bottom: 5px;
+      font-size: 12px;
+    }
+    
+    .stats-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 15px;
+    }
+    
+    .stat-item {
+      background: #f7fafc;
+      padding: 8px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    
+    .stat-label {
+      font-weight: bold;
+      color: #4a5568;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Crypto Kingpin</h1>
+      <div class="wallet-info">
+        <span>0xA1b2...E9f0</span>
+        <div class="token-badge">2,500 KING</div>
+      </div>
+    </header>
+    
+    <div class="status-message">
+      Welcome to the Financial District! Market prices are stable.
+    </div>
+    
+    <div class="game-grid">
+      <div class="panel">
+        <h2>City Map</h2>
+        <div class="map-container">
+          <!-- Map representation -->
+          <div class="map-row">
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell district">FIN</div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell district">TEC</div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+          </div>
+          <div class="map-row">
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell district">DOC</div>
+          </div>
+          <div class="map-row">
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+          </div>
+          <div class="map-row">
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+          </div>
+          <div class="map-row">
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell district">RES</div>
+            <div class="map-cell"></div>
+            <div class="map-cell district">
+              DTN
+              <div class="player-position"></div>
+            </div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+          </div>
+          <div class="map-row">
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+          </div>
+          <div class="map-row">
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell district">IND</div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+          </div>
+          <div class="map-row">
+            <div class="map-cell"></div>
+            <div class="map-cell district">OUT</div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell"></div>
+            <div class="map-cell district">BLK</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="panel">
+        <h2>Player Status</h2>
+        <div class="stats-container">
+          <div class="stat-item">
+            <div class="stat-label">Location:</div>
+            Downtown
+          </div>
+          <div class="stat-item">
+            <div class="stat-item">
+            <div class="stat-label">Action Points:</div>
+            7/10
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Risk Level:</div>
+            5/10
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Police Presence:</div>
+            7/10
+          </div>
+        </div>
+        
+        <h3 style="margin-bottom: 10px;">Inventory</h3>
+        <div>
+          <div class="inventory-item">NFT Artwork x3</div>
+          <div class="inventory-item">Smart Contract x2</div>
+          <div class="inventory-item">Crypto Mining Rig x1</div>
+          <div class="inventory-item">Digital Identity x4</div>
+        </div>
+        
+        <h3 style="margin: 15px 0 10px;">Character Stats</h3>
+        <div class="stats-container">
+          <div class="stat-item">
+            <div class="stat-label">Speed:</div>
+            75/100
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Charisma:</div>
+            62/100
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Inventory Space:</div>
+            15/20
+          </div>
+          <div class="stat-item">
+            <div class="stat-label">Stealth:</div>
+            41/100
+          </div>
+        </div>
+        
+        <button class="btn-primary" style="margin-top: 10px;">Restore Action Points</button>
+      </div>
+    </div>
+    
+    <div class="panel" style="margin-top: 20px;">
+      <h2>Downtown Market</h2>
+      <div class="asset-grid">
+        <div class="asset-card">
+          <div class="asset-header">
+            <div class="asset-name">Crypto Mining Rig</div>
+            <div class="legal">✓ Legal</div>
+          </div>
+          <div>Price: 5,250 KING</div>
+          <div>Owned: 1</div>
+          <div class="asset-actions">
+            <button class="btn-success">Buy</button>
+            <button class="btn-danger">Sell</button>
+          </div>
+        </div>
+        
+        <div class="asset-card">
+          <div class="asset-header">
+            <div class="asset-name">NFT Artwork</div>
+            <div class="legal">✓ Legal</div>
+          </div>
+          <div>Price: 1,850 KING</div>
+          <div>Owned: 3</div>
+          <div class="asset-actions">
+            <button class="btn-success">Buy</button>
+            <button class="btn-danger">Sell</button>
+          </div>
+        </div>
+        
+        <div class="asset-card">
+          <div class="asset-header">
+            <div class="asset-name">Smart Contract</div>
+            <div class="legal">✓ Legal</div>
+          </div>
+          <div>Price: 3,200 KING</div>
+          <div>Owned: 2</div>
+          <div class="asset-actions">
+            <button class="btn-success">Buy</button>
+            <button class="btn-danger">Sell</button>
+          </div>
+        </div>
+        
+        <div class="asset-card">
+          <div class="asset-header">
+            <div class="asset-name">Digital Identity</div>
+            <div class="legal">✓ Legal</div>
+          </div>
+          <div>Price: 1,050 KING</div>
+          <div>Owned: 4</div>
+          <div class="asset-actions">
+            <button class="btn-success">Buy</button>
+            <button class="btn-danger">Sell</button>
+          </div>
+        </div>
+        
+        <div class="asset-card">
+          <div class="asset-header">
+            <div class="asset-name">Hacked Data</div>
+            <div class="contraband">⚠️ Contraband</div>
+          </div>
+          <div>Price: 8,500 KING</div>
+          <div>Owned: 0</div>
+          <div class="asset-actions">
+            <button class="btn-success">Buy</button>
+            <button class="btn-danger" disabled>Sell</button>
+          </div>
+        </div>
+        
+        <div class="asset-card">
+          <div class="asset-header">
+            <div class="asset-name">Token Whitelist</div>
+            <div class="legal">✓ Legal</div>
+          </div>
+          <div>Price: 9,800 KING</div>
+          <div>Owned: 0</div>
+          <div class="asset-actions">
+            <button class="btn-success">Buy</button>
+            <button class="btn-danger" disabled>Sell</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div style="margin-top: 20px; background: #f7fafc; padding: 15px; border-radius: 8px; font-size: 14px;">
+      <h3 style="margin-top: 0;">Game Tips</h3>
+      <ul style="padding-left: 20px; margin-bottom: 0;">
+        <li>Watch for price differences between districts to maximize profits</li>
+        <li>Be careful with contraband items in high police presence areas</li>
+        <li>Use your character's special abilities to gain advantages</li>
+        <li>Form alliances with other players to control districts</li>
+        <li>Action points replenish hourly - plan your moves carefully</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>
